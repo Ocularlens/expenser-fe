@@ -1,15 +1,16 @@
 import { Path, UseFormRegister } from "react-hook-form";
-import { IRegisterForm } from "../types/registerTypes";
+import { IAuthForm } from "../../types/authTypes";
 
 type Props = {
   placeholder: string;
-  name: Path<IRegisterForm>;
+  name: Path<IAuthForm>;
   Icon: React.ElementType;
-  register: UseFormRegister<IRegisterForm>;
+  register: UseFormRegister<IAuthForm>;
   error: string | undefined;
   pattern?: { value: RegExp; message: string };
   isConfirmPassword?: boolean;
   passwordStr?: string;
+  showPassword?: boolean;
 };
 
 export default function PasswordField({
@@ -21,6 +22,7 @@ export default function PasswordField({
   pattern,
   isConfirmPassword,
   passwordStr,
+  showPassword = false,
 }: Props) {
   const errors = error?.split(",");
 
@@ -40,7 +42,7 @@ export default function PasswordField({
           className={`w-full p-3 border-l ${
             error ? "border-red-500" : "border-[#00246B]"
           } rounded-r-lg focus:outline-none`}
-          type="password"
+          type={showPassword ? "text" : "password"}
           placeholder={placeholder}
           {...register(name, {
             required: `${placeholder} is required`,
@@ -56,17 +58,16 @@ export default function PasswordField({
       </div>
       {errors && errors.length > 1 && (
         <ul>
-          {errors.map((error) => (
-            <li className="mt-2 pl-2 text-red-500">{error}</li>
+          {errors.map((error, index) => (
+            <li key={`error-${index}`} className="mt-2 pl-2 text-red-500">
+              {error}
+            </li>
           ))}
         </ul>
       )}
       {errors && errors.length === 1 && (
         <p className="mt-2 pl-2 text-red-500">{error}</p>
       )}
-      {/* {isConfirmPassword && passwordStr !== value && (
-        <p className="mt-2 pl-2 text-red-500">{passwordMatchMessage}</p>
-      )} */}
     </div>
   );
 }

@@ -1,10 +1,13 @@
+import { useState } from "react";
 import { FieldError, SubmitHandler, useForm } from "react-hook-form";
 import { FaClipboardUser, FaRegCircleUser } from "react-icons/fa6";
 import { TbPassword } from "react-icons/tb";
-import { IRegisterForm } from "../types/registerTypes";
-import Card from "./Card";
+import { Link } from "react-router-dom";
+import { IAuthForm } from "../../types/authTypes";
+import Card from "../Card";
+import { SubmitButton } from "../SubmitButton";
+import CheckBox from "./Checkbox";
 import PasswordField from "./PasswordField";
-import { SubmitButton } from "./SubmitButton";
 import TextField from "./TextField";
 
 export default function RegisterForm() {
@@ -13,7 +16,9 @@ export default function RegisterForm() {
     handleSubmit,
     formState: { errors },
     getValues,
-  } = useForm<IRegisterForm>();
+  } = useForm<IAuthForm>();
+
+  const [showPass, setShowPass] = useState(false);
 
   function getErrorMessage(
     error: FieldError | undefined,
@@ -29,7 +34,7 @@ export default function RegisterForm() {
     }
   }
 
-  const onSubmit: SubmitHandler<IRegisterForm> = (data) => {
+  const onSubmit: SubmitHandler<IAuthForm> = (data) => {
     alert(JSON.stringify(data));
   };
 
@@ -70,10 +75,12 @@ export default function RegisterForm() {
           register={register}
           error={getErrorMessage(errors.password, 6)}
           pattern={{
-            value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{6,}$/,
+            value:
+              /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{6,}$/,
             message:
               "Password should have At least one lowercase letter, At least one uppercase letter, At least one digit, At least one special character, Minimum length of 6 characters.",
           }}
+          showPassword={showPass}
         />
         <PasswordField
           placeholder="Confirm Password"
@@ -83,8 +90,16 @@ export default function RegisterForm() {
           error={getErrorMessage(errors.confirmPassword, 6)}
           passwordStr={getValues().password}
           isConfirmPassword
+          showPassword={showPass}
         />
+        <CheckBox setShowPass={setShowPass} />
         <SubmitButton text="SUBMIT" />
+        <Link
+          to="/login"
+          className="border border-[#00246B] bg-[#FFF] text-[#00246B] w-full flex rounded-lg p-3 mt-2 justify-center font-bold"
+        >
+          BACK TO LOGIN
+        </Link>
       </form>
     </Card>
   );

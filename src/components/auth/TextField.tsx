@@ -1,13 +1,13 @@
 import { Path, UseFormRegister } from "react-hook-form";
-import { IRegisterForm } from "../types/registerTypes";
+import { IAuthForm } from "../../types/authTypes";
 
 type Props = {
   placeholder: string;
-  name: Path<IRegisterForm>;
+  name: Path<IAuthForm>;
   Icon: React.ElementType;
-  register: UseFormRegister<IRegisterForm>;
+  register: UseFormRegister<IAuthForm>;
   error: string | undefined;
-  minLength: number;
+  minLength?: number;
 };
 
 export default function TextField({
