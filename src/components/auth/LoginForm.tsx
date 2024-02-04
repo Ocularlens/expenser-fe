@@ -2,7 +2,9 @@ import { useState } from "react";
 import { FieldError, SubmitHandler, useForm } from "react-hook-form";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { TbPassword } from "react-icons/tb";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { loginUser } from "../../services/AuthService";
+import useAuthStore from "../../store/authStore";
 import { IAuthForm } from "../../types/authTypes";
 import Card from "../Card";
 import { SubmitButton } from "../SubmitButton";
@@ -18,6 +20,9 @@ export default function LoginForm() {
   } = useForm<IAuthForm>();
 
   const [showPass, setShowPass] = useState(false);
+  const [isInvalid, setIsInvalid] = useState(false);
+  const { setIsLoggedIn, setToken } = useAuthStore();
+  const navigate = useNavigate();
 
   function getErrorMessage(
     error: FieldError | undefined,
@@ -33,8 +38,17 @@ export default function LoginForm() {
     }
   }
 
-  const onSubmit: SubmitHandler<IAuthForm> = (data) => {
-    alert(JSON.stringify(data));
+  const onSubmit: SubmitHandler<IAuthForm> = async (data) => {
+    loginUser(data)
+      .then((result) => {
+        setIsLoggedIn(true);
+        setToken(result);
+        navigate("/");
+      })
+      .catch((error) => {
+        setIsInvalid(true);
+        console.log(error);
+      });
   };
 
   return (
@@ -43,6 +57,11 @@ export default function LoginForm() {
         <h1 className="text-[#00246B] ml-3 mb-8 mt-3 font-semibold text-2xl">
           SIGN IN
         </h1>
+        {isInvalid && (
+          <p className="mb-2 text-center text-red-500 font-bold">
+            Invalid Credentials
+          </p>
+        )}
         <TextField
           placeholder="Username"
           name="username"

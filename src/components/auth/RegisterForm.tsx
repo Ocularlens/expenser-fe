@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FieldError, SubmitHandler, useForm } from "react-hook-form";
 import { FaClipboardUser, FaRegCircleUser } from "react-icons/fa6";
 import { TbPassword } from "react-icons/tb";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { registerUser } from "../../services/AuthService";
 import { IAuthForm } from "../../types/authTypes";
 import Card from "../Card";
 import { SubmitButton } from "../SubmitButton";
@@ -19,6 +20,10 @@ export default function RegisterForm() {
   } = useForm<IAuthForm>();
 
   const [showPass, setShowPass] = useState(false);
+  const [usernameError, setUsernameError] = useState("");
+  const navigate = useNavigate();
+
+  const username = getValues().username;
 
   function getErrorMessage(
     error: FieldError | undefined,
@@ -34,9 +39,20 @@ export default function RegisterForm() {
     }
   }
 
-  const onSubmit: SubmitHandler<IAuthForm> = (data) => {
-    alert(JSON.stringify(data));
+  const onSubmit: SubmitHandler<IAuthForm> = async (data) => {
+    const isSuccess = await registerUser(data);
+
+    if (typeof isSuccess === "string") {
+      setUsernameError(isSuccess);
+      return;
+    }
+
+    return navigate("/login");
   };
+
+  useEffect(() => {
+    setUsernameError("");
+  }, [username]);
 
   return (
     <Card>
@@ -67,6 +83,7 @@ export default function RegisterForm() {
           register={register}
           error={getErrorMessage(errors.username, 5)}
           minLength={5}
+          apiError={usernameError}
         />
         <PasswordField
           placeholder="Password"

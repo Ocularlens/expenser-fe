@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import PrivateOutlet from "./components/PrivateOutlet";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 
@@ -9,6 +10,9 @@ function App() {
         <Routes>
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/" element={<PrivateOutlet />}>
+            <Route element={<h1>WELCOME</h1>} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </>

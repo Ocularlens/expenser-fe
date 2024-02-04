@@ -8,6 +8,7 @@ type Props = {
   register: UseFormRegister<IAuthForm>;
   error: string | undefined;
   minLength?: number;
+  apiError?: string;
 };
 
 export default function TextField({
@@ -17,6 +18,7 @@ export default function TextField({
   register,
   error,
   minLength,
+  apiError,
 }: Props) {
   return (
     <div className={error ? "mb-2" : "mb-4"}>
@@ -41,6 +43,7 @@ export default function TextField({
         />
       </div>
       {error && <p className="mt-2 pl-2 text-red-500">{error}</p>}
+      {apiError && <p className="mt-2 pl-2 text-red-500">{apiError}</p>}
     </div>
   );
 }
