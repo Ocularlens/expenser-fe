@@ -1,5 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import PrivateOutlet from "./components/PrivateOutlet";
+import DashboardLayout from "./layout/DashboardLayout";
+import DashboardPage from "./pages/DashboardPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 
@@ -11,7 +13,10 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/" element={<PrivateOutlet />}>
-            <Route element={<h1>WELCOME</h1>} />
+            <Route path="" element={<DashboardLayout />}>
+              <Route path="" element={<DashboardPage />} />
+              <Route path="transactions" element={<h1>Transactions</h1>} />
+            </Route>
           </Route>
         </Routes>
       </BrowserRouter>
