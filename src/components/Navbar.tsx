@@ -10,7 +10,7 @@ const ROUTES = [
 ];
 
 export default function Navbar() {
-  const [showMenu, setShowMenu] = useState(false);
+  const [showMenu, setShowMenu] = useState(true);
   const { setIsLoggedIn, setToken } = useAuthStore();
 
   return (

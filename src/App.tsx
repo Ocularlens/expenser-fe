@@ -4,6 +4,7 @@ import DashboardLayout from "./layout/DashboardLayout";
 import DashboardPage from "./pages/DashboardPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import TransactionsPage from "./pages/TransactionsPage";
 
 function App() {
   return (
@@ -15,7 +16,7 @@ function App() {
           <Route path="/" element={<PrivateOutlet />}>
             <Route path="" element={<DashboardLayout />}>
               <Route path="" element={<DashboardPage />} />
-              <Route path="transactions" element={<h1>Transactions</h1>} />
+              <Route path="transactions" element={<TransactionsPage />} />
             </Route>
           </Route>
         </Routes>
