@@ -16,7 +16,7 @@ function App() {
           <Route path="/" element={<PrivateOutlet />}>
             <Route path="" element={<DashboardLayout />}>
               <Route path="" element={<DashboardPage />} />
-              <Route path="transactions" element={<TransactionsPage />} />
+              <Route path="transactions"  element={<TransactionsPage />} />
             </Route>
           </Route>
         </Routes>

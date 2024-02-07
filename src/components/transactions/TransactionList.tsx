@@ -15,10 +15,10 @@ export function TransactionList({ transactions }: Props) {
       {transactionArray.length > 1 &&
         transactionArray.map(({ key, data }) => {
           return (
-            <div className="mb-1">
+            <div className="mb-1" key={key}>
               <div className="bg-[#00246B] text-[#FFF] font-bold p-2 pl-4">{key}</div>
-              {data.map((val) => (
-                <Transaction transaction={val} />
+              {data.map((transaction) => (
+                <Transaction transaction={transaction} key={transaction.id}/>
               ))}
             </div>
           );
