@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import Spinner from "../components/Spinner";
 import MonthPicker from "../components/transactions/MonthPicker";
 import { TransactionList } from "../components/transactions/TransactionList";
 import { groupByDate } from "../services/TransactionService";
@@ -15,6 +16,7 @@ export default function TransactionsPage() {
   const [monthIndex, setMonthIndex] = useState(
     Number(searchParams.get("month")) || 1
   );
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleUpdate = useCallback(
     (month: number) => {
@@ -33,19 +35,28 @@ export default function TransactionsPage() {
       ? 1
       : Number(searchParams.get("month"));
 
+    setIsLoading(true);
+
     groupByDate(month, token)
       .then((result) => {
         setTransactions(result);
+        setIsLoading(false);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        setIsLoading(true);
+        console.log(error);
+      });
   }, [token, monthIndex, searchParams]);
 
   return (
     <div>
-      <MonthPicker
-        updateMonth={handleUpdate}
-      />
-      <TransactionList transactions={transactions} />
+      <MonthPicker updateMonth={handleUpdate} />
+      {isLoading && (
+        <div className="flex justify-center items-center">
+          <Spinner />
+        </div>
+      )}
+      {!isLoading && <TransactionList transactions={transactions} />}
     </div>
   );
 }
