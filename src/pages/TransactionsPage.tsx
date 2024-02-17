@@ -13,9 +13,6 @@ export default function TransactionsPage() {
   const navigate = useNavigate();
 
   const [transactions, setTransactions] = useState<GroupByDateResp>({});
-  const [monthIndex, setMonthIndex] = useState(
-    Number(searchParams.get("month")) || 1
-  );
   const [isLoading, setIsLoading] = useState(true);
 
   const handleUpdate = useCallback(
@@ -24,32 +21,31 @@ export default function TransactionsPage() {
 
       // Navigate to the same page with updated query parameters
       navigate({ search: `?month=${month}` });
-
-      setMonthIndex(month);
     },
     [navigate, setSearchParams]
   );
 
-  useEffect(() => {
-    const month = !searchParams.get("month")
-      ? 1
-      : Number(searchParams.get("month"));
+  const month = !searchParams.get("month")
+    ? null
+    : Number(searchParams.get("month"));
 
+  useEffect(() => {
     setIsLoading(true);
 
-    groupByDate(month, token)
-      .then((result) => {
-        setTransactions(result);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        setIsLoading(true);
-        console.log(error);
-      });
-  }, [token, monthIndex, searchParams]);
+    if (month)
+      groupByDate(month, token)
+        .then((result) => {
+          setTransactions(result);
+          setIsLoading(false);
+        })
+        .catch((error) => {
+          setIsLoading(true);
+          console.log(error);
+        });
+  }, [token, month]);
 
   return (
-    <div>
+    <>
       <MonthPicker updateMonth={handleUpdate} />
       {isLoading && (
         <div className="flex justify-center items-center">
@@ -57,6 +53,6 @@ export default function TransactionsPage() {
         </div>
       )}
       {!isLoading && <TransactionList transactions={transactions} />}
-    </div>
+    </>
   );
 }

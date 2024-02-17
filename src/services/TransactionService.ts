@@ -1,8 +1,10 @@
 import axios, { AxiosError } from "axios";
-import { GroupByDateResp } from "../types/transactionServiceTypes";
+import {
+  GroupByDateResp,
+  NewTransaction,
+} from "../types/transactionServiceTypes";
 
 const SERVICE_URL = import.meta.env.VITE_BACKEND_URL + "transaction";
-
 
 export async function groupByDate(
   month: number,
@@ -19,6 +21,25 @@ export async function groupByDate(
     })
     .then((result) => {
       return result.data;
+    })
+    .catch((error) => {
+      if (error instanceof AxiosError) {
+        return error.response?.data.message;
+      }
+
+      throw error;
+    });
+}
+
+export async function addTransaction(data: NewTransaction, token: string) {
+  return axios
+    .post(SERVICE_URL, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then(() => {
+      return true;
     })
     .catch((error) => {
       if (error instanceof AxiosError) {

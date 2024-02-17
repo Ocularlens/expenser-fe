@@ -3,6 +3,7 @@ import PrivateOutlet from "./components/PrivateOutlet";
 import DashboardLayout from "./layout/DashboardLayout";
 import DashboardPage from "./pages/DashboardPage";
 import LoginPage from "./pages/LoginPage";
+import NewTransactionPage from "./pages/NewTransactionPage";
 import RegisterPage from "./pages/RegisterPage";
 import TransactionsPage from "./pages/TransactionsPage";
 
@@ -16,7 +17,8 @@ function App() {
           <Route path="/" element={<PrivateOutlet />}>
             <Route path="" element={<DashboardLayout />}>
               <Route path="" element={<DashboardPage />} />
-              <Route path="transactions"  element={<TransactionsPage />} />
+              <Route path="transactions" element={<TransactionsPage />} />
+              <Route path="new-transaction" element={<NewTransactionPage />} />
             </Route>
           </Route>
         </Routes>
