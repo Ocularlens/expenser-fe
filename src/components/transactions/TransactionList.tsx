@@ -6,6 +6,7 @@ type Props = {
 };
 
 export function TransactionList({ transactions }: Props) {
+  console.log(transactions)
   const transactionArray = Object.entries(transactions).map(([key, data]) => {
     return { data, key };
   });
@@ -18,7 +19,7 @@ export function TransactionList({ transactions }: Props) {
 
   return (
     <div className="flex flex-col">
-      {transactionArray.length > 1 &&
+      {transactionArray.length > 0 &&
         transactionArray.map(({ key, data }) => {
           return (
             <div className="mb-1" key={key}>

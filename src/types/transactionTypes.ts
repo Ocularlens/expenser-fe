@@ -1,6 +1,6 @@
 export interface ITransactionForm {
   categoryId: number,
   amount: number,
-  notes: string,
+  notes?: string,
   transactionDate: Date
 }

@@ -32,6 +32,8 @@ export default function TransactionForm({ categories, token }: Props) {
       : "border-[#228B22]";
 
   const onSubmit: SubmitHandler<ITransactionForm> = (data) => {
+    if (data.notes === "") delete data.notes;
+
     addTransaction(data, token)
       .then(() => navigate("/transactions"))
       .catch((error) => console.log(error));
