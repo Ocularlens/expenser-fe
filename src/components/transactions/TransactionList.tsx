@@ -3,17 +3,19 @@ import Transaction from "./Transaction";
 
 type Props = {
   transactions: GroupByDateResp;
+  deleteTransaction(id: number): void;
 };
 
-export function TransactionList({ transactions }: Props) {
-  console.log(transactions)
+export function TransactionList({ transactions, deleteTransaction }: Props) {
   const transactionArray = Object.entries(transactions).map(([key, data]) => {
     return { data, key };
   });
 
   if (transactionArray.length === 0) {
     return (
-      <div className="flex justify-center mt-3 font-semibold">NO TRANSACTIONS FOUND FOR THIS MONTH</div>
+      <div className="flex justify-center mt-3 font-semibold">
+        NO TRANSACTIONS FOUND FOR THIS MONTH
+      </div>
     );
   }
 
@@ -27,7 +29,11 @@ export function TransactionList({ transactions }: Props) {
                 {key}
               </div>
               {data.map((transaction) => (
-                <Transaction transaction={transaction} key={transaction.id} />
+                <Transaction
+                  deleteTransaction={deleteTransaction}
+                  transaction={transaction}
+                  key={transaction.id}
+                />
               ))}
             </div>
           );

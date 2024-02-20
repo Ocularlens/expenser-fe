@@ -1,12 +1,15 @@
+import { FaRegEdit } from "react-icons/fa";
+import { MdOutlineDeleteForever } from "react-icons/md";
 import { TransactionType } from "../../enum/transactionType";
 import { Transaction as Model } from "../../types/entities";
 import NumberFormatter from "../../utils/NumberFormat";
 
 type Props = {
   transaction: Model;
+  deleteTransaction(id: number): void;
 };
 
-export default function Transaction({ transaction }: Props) {
+export default function Transaction({ transaction, deleteTransaction }: Props) {
   const symbol =
     transaction.category.type === TransactionType.CREDIT ? "-" : "+";
 
@@ -16,14 +19,29 @@ export default function Transaction({ transaction }: Props) {
         <div className="font-bold text-xl">{transaction.category.name}</div>
         <div className="text-xs">{transaction.notes}</div>
       </div>
-      <div
-        className={`basis-1/2 p-5 text-right ${
-          transaction.category.type === TransactionType.CREDIT
-            ? "text-[red]"
-            : "text-[green]"
-        }`}
-      >
-        {symbol} PHP {NumberFormatter(transaction.amount, 2)}
+      <div className="flex flex-col basis-1/2 p-5 text-right">
+        <div className="text-xl">
+          <button className="text-[blue]">
+            <FaRegEdit />
+          </button>
+          <button
+            className="text-[red]"
+            onClick={() => {
+              deleteTransaction(transaction.id as number);
+            }}
+          >
+            <MdOutlineDeleteForever />
+          </button>
+        </div>
+        <div
+          className={`${
+            transaction.category.type === TransactionType.CREDIT
+              ? "text-[red]"
+              : "text-[green]"
+          }`}
+        >
+          {symbol} PHP {NumberFormatter(transaction.amount, 2)}
+        </div>
       </div>
     </div>
   );
