@@ -1,24 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { TransactionType } from "../../enum/transactionType";
-import { addTransaction } from "../../services/TransactionService";
-import { Category } from "../../types/entities";
+import {
+  addTransaction,
+  updateTransaction,
+} from "../../services/TransactionService";
+import { Category, Transaction } from "../../types/entities";
 import { ITransactionForm } from "../../types/transactionTypes";
 
 type Props = {
   categories: Category[];
   token: string;
+  transaction?: Transaction;
 };
 
-export default function TransactionForm({ categories, token }: Props) {
+export default function TransactionForm({
+  categories,
+  token,
+  transaction,
+}: Props) {
   const {
     register,
     control,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<ITransactionForm>();
   const [transactionType, setTransactionType] = useState(
     TransactionType.CREDIT
@@ -34,10 +43,30 @@ export default function TransactionForm({ categories, token }: Props) {
   const onSubmit: SubmitHandler<ITransactionForm> = (data) => {
     if (data.notes === "") delete data.notes;
 
-    addTransaction(data, token)
+    if (!transaction)
+      return addTransaction(data, token)
+        .then(() => navigate("/transactions"))
+        .catch((error) => console.log(error));
+
+    return updateTransaction(data, token, transaction.id as unknown as number)
       .then(() => navigate("/transactions"))
       .catch((error) => console.log(error));
   };
+
+  useEffect(() => {
+    if (transaction) {
+      Object.entries(transaction).forEach(([key, value]) => {
+        if (key === "category") {
+          return setValue("categoryId", value?.id);
+        }
+        if (key === "transactionDate")
+          return setValue("transactionDate", new Date(value));
+        return setValue(key as keyof ITransactionForm, value);
+      });
+
+      setTransactionType(transaction.category.type);
+    }
+  }, [transaction, setValue]);
 
   return (
     <div className="bg-[#FFF] rounded-md mt-20">
@@ -127,14 +156,16 @@ export default function TransactionForm({ categories, token }: Props) {
               placeholder="Enter note"
               {...register("notes", {
                 minLength: {
-                  value: 3,
-                  message: "Note should atleast be 3 characters long",
+                  value: 6,
+                  message: "Note should atleast be 6 characters long",
                 },
               })}
             />
           </div>
           {errors.notes && (
-            <p className="mt-2 mb-2 pl-2 text-red-500">{errors.notes.message}</p>
+            <p className="mt-2 mb-2 pl-2 text-red-500">
+              {errors.notes.message}
+            </p>
           )}
           <div className="flex flex-col border rounded-md p-2 mb-2 focus-within:border-[#8AB6F9]">
             <label className="text-sm font-bold ml-2">Date</label>

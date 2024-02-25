@@ -1,5 +1,6 @@
 import { FaRegEdit } from "react-icons/fa";
 import { MdOutlineDeleteForever } from "react-icons/md";
+import { Link } from "react-router-dom";
 import { TransactionType } from "../../enum/transactionType";
 import { Transaction as Model } from "../../types/entities";
 import NumberFormatter from "../../utils/NumberFormat";
@@ -20,10 +21,13 @@ export default function Transaction({ transaction, deleteTransaction }: Props) {
         <div className="text-xs">{transaction.notes}</div>
       </div>
       <div className="flex flex-col basis-1/2 p-5 text-right">
-        <div className="text-xl">
-          <button className="text-[blue]">
+        <div className="flex text-2xl justify-end">
+          <Link
+            to={`/update-transaction/${transaction.id}`}
+            className="text-[blue]"
+          >
             <FaRegEdit />
-          </button>
+          </Link>
           <button
             className="text-[red]"
             onClick={() => {
