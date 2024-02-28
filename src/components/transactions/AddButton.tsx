@@ -1,11 +1,15 @@
 import { IoIosAddCircleOutline } from "react-icons/io";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
-export default function AddTransactionButton() {
+export default function AddButton() {
+  const location = useLocation();
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate("/new-transaction");
+    if (location.pathname === "/my-categories")
+      return navigate("/new-category");
+
+    return navigate("/new-transaction");
   };
 
   return (

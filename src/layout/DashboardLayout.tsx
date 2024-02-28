@@ -1,6 +1,6 @@
 import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import AddTransactionButton from "../components/transactions/AddTranscationButton";
+import AddButton from "../components/transactions/AddButton";
 
 export default function DashboardLayout() {
   const location = useLocation();
@@ -18,7 +18,7 @@ export default function DashboardLayout() {
       <Navbar />
       <div className="p-3">
         <Outlet />
-        {!showAddTransactionPage && <AddTransactionButton />}
+        {!showAddTransactionPage && <AddButton />}
       </div>
     </>
   );

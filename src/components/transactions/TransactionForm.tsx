@@ -43,13 +43,21 @@ export default function TransactionForm({
   const onSubmit: SubmitHandler<ITransactionForm> = (data) => {
     if (data.notes === "") delete data.notes;
 
-    if (!transaction)
-      return addTransaction(data, token)
-        .then(() => navigate("/transactions"))
-        .catch((error) => console.log(error));
+    const handleApiRequest = new Promise<void>((resolve, reject) => {
+      if (!transaction)
+        return addTransaction(data, token)
+          .then(() => resolve())
+          .catch((error) => reject(error));
 
-    return updateTransaction(data, token, transaction.id as unknown as number)
-      .then(() => navigate("/transactions"))
+      return updateTransaction(data, token, transaction.id as unknown as number)
+        .then(() => resolve())
+        .catch((error) => reject(error));
+    });
+
+    handleApiRequest
+      .then(() => {
+        navigate("/transactions");
+      })
       .catch((error) => console.log(error));
   };
 
@@ -109,6 +117,7 @@ export default function TransactionForm({
               autoComplete="off"
               type="number"
               placeholder="Enter amount"
+              step="0.01"
               {...register("amount", {
                 required: "Amount is is required",
                 min: 1,
@@ -191,7 +200,10 @@ export default function TransactionForm({
               {errors.transactionDate.message}
             </p>
           )}
-          <button className="bg-[#8AB6F9] rounded-md items-center w-full p-4 text-white font-bold">
+          <button
+            type="submit"
+            className="bg-[#8AB6F9] rounded-md items-center w-full p-4 text-white font-bold"
+          >
             SAVE
           </button>
         </div>

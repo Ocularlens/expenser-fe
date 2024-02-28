@@ -7,6 +7,7 @@ import NewTransactionPage from "./pages/NewTransactionPage";
 import RegisterPage from "./pages/RegisterPage";
 import TransactionsPage from "./pages/TransactionsPage";
 import UpdateTransactionPage from "./pages/UpdateTransactionPage";
+import UserCategoriesPage from "./pages/UserCategoriesPage";
 
 function App() {
   return (
@@ -20,7 +21,11 @@ function App() {
               <Route path="" element={<DashboardPage />} />
               <Route path="transactions" element={<TransactionsPage />} />
               <Route path="new-transaction" element={<NewTransactionPage />} />
-              <Route path="update-transaction/:id" element={<UpdateTransactionPage />} />
+              <Route path="my-categories" element={<UserCategoriesPage />} />
+              <Route
+                path="update-transaction/:id"
+                element={<UpdateTransactionPage />}
+              />
             </Route>
           </Route>
         </Routes>

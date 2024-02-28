@@ -7,6 +7,7 @@ import useAuthStore from "../store/authStore";
 const ROUTES = [
   { to: "/", text: "Dashboard" },
   { to: "/transactions", text: "Transactions" },
+  { to: "/my-categories", text: "My Categories" },
 ];
 
 export default function Navbar() {
