@@ -6,7 +6,7 @@ export default function DashboardLayout() {
   const location = useLocation();
 
   const hideAddTransactionButton = (path: string) => {
-    if (path === "/new-transaction") return true;
+    if (path === "/new-transaction" || path === '/new-category') return true;
 
     if (path.includes("/update-transaction")) return true;
   };

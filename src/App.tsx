@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import PrivateOutlet from "./components/PrivateOutlet";
 import DashboardLayout from "./layout/DashboardLayout";
+import AddCategoryPage from "./pages/AddCategoryPage";
 import DashboardPage from "./pages/DashboardPage";
 import LoginPage from "./pages/LoginPage";
 import NewTransactionPage from "./pages/NewTransactionPage";
@@ -22,6 +23,7 @@ function App() {
               <Route path="transactions" element={<TransactionsPage />} />
               <Route path="new-transaction" element={<NewTransactionPage />} />
               <Route path="my-categories" element={<UserCategoriesPage />} />
+              <Route path="new-category" element={<AddCategoryPage />} />
               <Route
                 path="update-transaction/:id"
                 element={<UpdateTransactionPage />}

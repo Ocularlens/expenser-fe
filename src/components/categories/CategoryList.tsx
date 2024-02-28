@@ -27,27 +27,32 @@ export default function CategoryList({ categories }: Props) {
 
   return (
     <div className="flex flex-col">
-      <div>
-        <button>Add Category</button>
-      </div>
-      <div className="mb-2">
+      <div className="mb-2 h-auto">
         <div className="bg-[#00246B] p-4 text-[#FFF] font-semibold text-center">
           CREDIT
         </div>
         <div>
-          {credits.map((credit) => (
-            <Category category={credit} />
-          ))}
+          {credits.length > 0 &&
+            credits.map((credit) => (
+              <Category key={`${credit.id}-credit`} category={credit} />
+            ))}
+          {credits.length === 0 && (
+            <div className="bg-[#FFF] p-4 text-center font-bold">N/A</div>
+          )}
         </div>
       </div>
-      <div className="mb-2">
+      <div className="mb-2 h-auto">
         <div className="bg-[#00246B] p-4 text-[#FFF] font-semibold text-center">
           DEBIT
         </div>
         <div>
-          {debits.map((debit) => (
-            <Category category={debit} />
-          ))}
+          {debits.length > 0 &&
+            debits.map((debit) => (
+              <Category key={`${debit.id}-debit`} category={debit} />
+            ))}
+          {debits.length === 0 && (
+            <div className="bg-[#FFF] p-4 text-center font-bold">N/A</div>
+          )}
         </div>
       </div>
     </div>
