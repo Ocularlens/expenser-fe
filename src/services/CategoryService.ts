@@ -77,7 +77,7 @@ export async function retrieveCategory(
   token: string
 ): Promise<Category> {
   try {
-    const result = await axios.put(`${SERVICE_URL}/${categoryId}`, {
+    const result = await axios.get(`${SERVICE_URL}/${categoryId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

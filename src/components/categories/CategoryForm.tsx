@@ -1,26 +1,33 @@
+import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { TransactionType } from "../../enum/transactionType";
-import { addCategory } from "../../services/CategoryService";
+import { addCategory, updateCategory } from "../../services/CategoryService";
 import { ICategoryForm } from "../../types/categoryTypes";
+import { Category } from "../../types/entities";
 
 type Props = {
   token: string;
+  category?: Category;
 };
 
-export default function CategoryForm({ token }: Props) {
+export default function CategoryForm({ token, category }: Props) {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<ICategoryForm>();
   const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<ICategoryForm> = (data) => {
-    console.log(data);
-
     const handleApiRequest = new Promise<void>((resolve, reject) => {
-      addCategory(data, token)
+      if (!category)
+        return addCategory(data, token)
+          .then(() => resolve())
+          .catch((error) => reject(error));
+
+      return updateCategory(data, category.id as unknown as number, token)
         .then(() => resolve())
         .catch((error) => reject(error));
     });
@@ -31,6 +38,15 @@ export default function CategoryForm({ token }: Props) {
       })
       .catch((error) => console.log(error));
   };
+
+  useEffect(() => {
+    if (category) {
+      Object.entries(category).forEach(([key, value]) => {
+        if (key === "name") return setValue("categoryName", value);
+        return setValue(key as keyof ICategoryForm, value);
+      });
+    }
+  }, [category, setValue]);
 
   return (
     <div className="mt-20">
@@ -70,7 +86,9 @@ export default function CategoryForm({ token }: Props) {
             />
           </div>
           {errors.categoryName && (
-            <p className="mt-2 mb-2 pl-2 text-red-500">{errors.categoryName.message}</p>
+            <p className="mt-2 mb-2 pl-2 text-red-500">
+              {errors.categoryName.message}
+            </p>
           )}
           <button
             type="submit"
