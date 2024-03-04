@@ -26,7 +26,7 @@ export default function CategoryList({ categories }: Props) {
   }, [categories]);
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col mb-20">
       <div className="mb-2 h-auto">
         <div className="bg-[#00246B] p-4 text-[#FFF] font-semibold text-center">
           CREDIT

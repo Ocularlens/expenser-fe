@@ -4,24 +4,22 @@ import "react-datepicker/dist/react-datepicker.css";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { TransactionType } from "../../enum/transactionType";
+import AuthError from "../../errors/AuthError";
 import {
   addTransaction,
   updateTransaction,
 } from "../../services/TransactionService";
+import useAuthStore from "../../store/authStore";
 import { Category, Transaction } from "../../types/entities";
 import { ITransactionForm } from "../../types/transactionTypes";
 
 type Props = {
   categories: Category[];
-  token: string;
   transaction?: Transaction;
 };
 
-export default function TransactionForm({
-  categories,
-  token,
-  transaction,
-}: Props) {
+export default function TransactionForm({ categories, transaction }: Props) {
+  const { setToken } = useAuthStore();
   const {
     register,
     control,
@@ -45,20 +43,23 @@ export default function TransactionForm({
 
     const handleApiRequest = new Promise<void>((resolve, reject) => {
       if (!transaction)
-        return addTransaction(data, token)
+        return addTransaction(data)
           .then(() => resolve())
           .catch((error) => reject(error));
 
-      return updateTransaction(data, token, transaction.id as unknown as number)
+      return updateTransaction(data, transaction.id as unknown as number)
         .then(() => resolve())
         .catch((error) => reject(error));
     });
 
     handleApiRequest
       .then(() => {
-        navigate("/transactions");
+        navigate("/");
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        if (error instanceof AuthError) return setToken("");
+        console.log(error);
+      });
   };
 
   useEffect(() => {

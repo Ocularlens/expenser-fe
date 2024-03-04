@@ -2,16 +2,18 @@ import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { TransactionType } from "../../enum/transactionType";
+import AuthError from "../../errors/AuthError";
 import { addCategory, updateCategory } from "../../services/CategoryService";
+import useAuthStore from "../../store/authStore";
 import { ICategoryForm } from "../../types/categoryTypes";
 import { Category } from "../../types/entities";
 
 type Props = {
-  token: string;
   category?: Category;
 };
 
-export default function CategoryForm({ token, category }: Props) {
+export default function CategoryForm({ category }: Props) {
+  const { setToken } = useAuthStore();
   const {
     register,
     handleSubmit,
@@ -23,11 +25,11 @@ export default function CategoryForm({ token, category }: Props) {
   const onSubmit: SubmitHandler<ICategoryForm> = (data) => {
     const handleApiRequest = new Promise<void>((resolve, reject) => {
       if (!category)
-        return addCategory(data, token)
+        return addCategory(data)
           .then(() => resolve())
           .catch((error) => reject(error));
 
-      return updateCategory(data, category.id as unknown as number, token)
+      return updateCategory(data, category.id as unknown as number)
         .then(() => resolve())
         .catch((error) => reject(error));
     });
@@ -36,7 +38,10 @@ export default function CategoryForm({ token, category }: Props) {
       .then(() => {
         navigate("/my-categories");
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        if (error instanceof AuthError) return setToken("");
+        console.log(error);
+      });
   };
 
   useEffect(() => {

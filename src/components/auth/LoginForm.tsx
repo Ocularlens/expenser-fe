@@ -21,7 +21,7 @@ export default function LoginForm() {
 
   const [showPass, setShowPass] = useState(false);
   const [isInvalid, setIsInvalid] = useState(false);
-  const { setIsLoggedIn, setToken } = useAuthStore();
+  const { setToken } = useAuthStore();
   const navigate = useNavigate();
 
   function getErrorMessage(
@@ -41,7 +41,6 @@ export default function LoginForm() {
   const onSubmit: SubmitHandler<IAuthForm> = async (data) => {
     loginUser(data)
       .then((result) => {
-        setIsLoggedIn(true);
         setToken(result);
         navigate("/");
       })

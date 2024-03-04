@@ -11,7 +11,7 @@ const ROUTES = [
 
 export default function Navbar() {
   const [showMenu, setShowMenu] = useState(true);
-  const { setIsLoggedIn, setToken } = useAuthStore();
+  const { setToken } = useAuthStore();
 
   return (
     <nav className="bg-[#00246B] w-full">
@@ -58,7 +58,6 @@ export default function Navbar() {
               <button
                 className="block py-2 px-3 text-white"
                 onClick={() => {
-                  setIsLoggedIn(false);
                   setToken("");
                 }}
               >
