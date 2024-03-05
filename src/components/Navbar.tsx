@@ -1,72 +1,84 @@
 import { useState } from "react";
-import { HiMenu } from "react-icons/hi";
-import { TbMoneybag } from "react-icons/tb";
+import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import useAuthStore from "../store/authStore";
 
-const ROUTES = [
-  { to: "/", text: "Dashboard" },
-  { to: "/my-categories", text: "My Categories" },
-];
-
 export default function Navbar() {
-  const [showMenu, setShowMenu] = useState(true);
+  const [nav, setNav] = useState(false);
   const { setToken } = useAuthStore();
 
+  // Toggle function to handle the navbar's display
+  const handleNav = () => {
+    setNav(!nav);
+  };
+
+  // Array containing navigation items
+  const navItems = [
+    { id: 1, text: "Home", to: "/" },
+    { id: 2, text: "Categories", to: "/my-categories" },
+  ];
+
   return (
-    <nav className="bg-[#00246B] w-full">
-      <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <Link
-          to="/"
-          className="flex items-center space-x-3 rtl:space-x-reverse"
-        >
-          <TbMoneybag className="h-8 text-[#FFF]" />
-          <span className="self-center text-2xl font-semibold whitespace-nowrap text-[#FFF]">
-            Expenser
-          </span>
-        </Link>
-        <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+    <div className="bg-[#00246B] flex justify-between items-center h-24 mx-auto px-4 text-white">
+      {/* Logo */}
+      <h1 className="w-full text-3xl font-bold text-[#8AB6F9]">EXPENSER</h1>
+
+      {/* Desktop Navigation */}
+      <ul className="hidden md:flex">
+        {navItems.map((item) => (
+          <li className="p-4 hover:bg-[#8AB6F9] rounded-xl m-2 cursor-pointer duration-300 hover:text-[#00246B]">
+            <Link key={item.id} to={item.to}>
+              {item.text}
+            </Link>
+          </li>
+        ))}
+        <li className="p-4 hover:bg-[#8AB6F9] rounded-xl m-2 cursor-pointer duration-300 hover:text-[#00246B]">
           <button
-            data-collapse-toggle="navbar-user"
-            type="button"
-            className="inline-flex items-center text-[#FFF] p-2 w-10 h-10 justify-center text-sm rounded-lg md:hidden"
             onClick={() => {
-              setShowMenu((prev) => !prev);
+              setToken("");
             }}
           >
-            <span className="sr-only">Open main menu</span>
-            <HiMenu className="h-5 w-5" />
+            Logout
           </button>
-        </div>
-        <div
-          className={`items-center justify-between ${
-            showMenu && "hidden"
-          } w-full md:flex md:w-auto md:order-1`}
-          id="navbar-user"
-        >
-          <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 bg-[#00246B] md:space-x-8">
-            <li>
-              {ROUTES.map((route) => (
-                <Link
-                  className="block py-2 px-3 text-white"
-                  key={route.text}
-                  to={route.to}
-                >
-                  {route.text}
-                </Link>
-              ))}
-              <button
-                className="block py-2 px-3 text-white"
-                onClick={() => {
-                  setToken("");
-                }}
-              >
-                Logout
-              </button>
-            </li>
-          </ul>
-        </div>
+        </li>
+      </ul>
+
+      {/* Mobile Navigation Icon */}
+      <div onClick={handleNav} className="block md:hidden text-[#8AB6F9]">
+        {nav ? <AiOutlineClose size={20} /> : <AiOutlineMenu size={20} />}
       </div>
-    </nav>
+
+      {/* Mobile Navigation Menu */}
+      <ul
+        className={
+          nav
+            ? "fixed md:hidden left-0 top-0 w-[60%] h-full border-r border-r-[#CADCFC] bg-[#00246B] ease-in-out duration-500 z-40"
+            : "ease-in-out w-[60%] duration-500 fixed top-0 bottom-0 left-[-100%] z-40"
+        }
+      >
+        {/* Mobile Logo */}
+        <h1 className="w-full text-3xl font-bold text-[#8AB6F9] m-4">
+          EXPENSER
+        </h1>
+
+        {/* Mobile Navigation Items */}
+        {navItems.map((item) => (
+          <li className="p-4 border-b rounded-xl hover:bg-[#8AB6F9] duration-300 hover:text-[#00246B] cursor-pointer border-[#CADCFC]">
+            <Link key={item.id} to={item.to}>
+              {item.text}
+            </Link>
+          </li>
+        ))}
+        <li className="p-4 border-b rounded-xl hover:bg-[#8AB6F9] duration-300 hover:text-[#00246B] cursor-pointer border-[#CADCFC]">
+          <button
+            onClick={() => {
+              setToken("");
+            }}
+          >
+            Logout
+          </button>
+        </li>
+      </ul>
+    </div>
   );
 }

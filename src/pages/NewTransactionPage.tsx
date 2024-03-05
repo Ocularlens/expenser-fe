@@ -21,8 +21,8 @@ export default function NewTransactionPage() {
   }, [setToken]);
 
   return (
-    <>
+    <div className="md:flex md:justify-center">
       <TransactionForm categories={categories} />
-    </>
+    </div>
   );
 }

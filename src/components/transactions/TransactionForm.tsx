@@ -78,7 +78,7 @@ export default function TransactionForm({ categories, transaction }: Props) {
   }, [transaction, setValue]);
 
   return (
-    <div className="bg-[#FFF] rounded-md mt-20">
+    <div className="bg-[#FFF] rounded-md mt-20 md:w-3/4">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div
           className={`flex flex-row w-full border-b ${borderBottomColor} p-4 pb-0 mb-3`}
@@ -203,7 +203,7 @@ export default function TransactionForm({ categories, transaction }: Props) {
           )}
           <button
             type="submit"
-            className="bg-[#8AB6F9] rounded-md items-center w-full p-4 text-white font-bold"
+            className="bg-[#8AB6F9] rounded-md items-center w-full p-4 text-white font-bold hover:bg-[#00246B]"
           >
             SAVE
           </button>

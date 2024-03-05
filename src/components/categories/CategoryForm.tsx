@@ -97,7 +97,7 @@ export default function CategoryForm({ category }: Props) {
           )}
           <button
             type="submit"
-            className="bg-[#8AB6F9] rounded-md items-center w-full p-4 text-white font-bold"
+            className="bg-[#8AB6F9] rounded-md items-center w-full p-4 text-white font-bold hover:bg-[#00246B]"
           >
             SAVE
           </button>

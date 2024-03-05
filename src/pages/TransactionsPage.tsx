@@ -84,28 +84,30 @@ export default function TransactionsPage() {
   const closeModal = () => setIsModal(false);
 
   return (
-    <>
-      <MonthPicker updateMonth={handleUpdate} />
-      {isLoading && (
-        <div className="flex justify-center items-center">
-          <Spinner />
-        </div>
-      )}
-      {!isLoading && (
-        <>
-          <TransactionList
-            deleteTransaction={openModal}
-            transactions={transactions}
-          />
-          <ConfirmationModal
-            message="Are you sure you want to delete this transaction?"
-            title="Delete Transaction"
-            isOpen={isModal}
-            closeModal={closeModal}
-            confirm={handleDelete}
-          />
-        </>
-      )}
-    </>
+    <div className="md:flex md:justify-center">
+      <div className="md:w-3/4">
+        <MonthPicker updateMonth={handleUpdate} />
+        {isLoading && (
+          <div className="flex justify-center items-center">
+            <Spinner />
+          </div>
+        )}
+        {!isLoading && (
+          <>
+            <TransactionList
+              deleteTransaction={openModal}
+              transactions={transactions}
+            />
+            <ConfirmationModal
+              message="Are you sure you want to delete this transaction?"
+              title="Delete Transaction"
+              isOpen={isModal}
+              closeModal={closeModal}
+              confirm={handleDelete}
+            />
+          </>
+        )}
+      </div>
+    </div>
   );
 }
